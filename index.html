@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>firefly map</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <script src="http://d3js.org/d3.v3.min.js"></script>
+        <script src="http://d3js.org/topojson.v0.min.js"></script>
+        <style>
+            .state{
+                fill:none;
+                stroke:black;
+            }
+        </style>
+    </head>
+    <body>
+    <script>
+        var width = 960,
+            height = 500;
+
+        var path = d3.geo.path();
+
+        var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        d3.json('us-states.json', function(d){
+
+            svg.selectAll("path")
+                .data(d.features)
+                .enter()
+                .append('path')
+                .attr('d',path)
+                .attr('class','state')
+
+        })
+
+    </script>
+    </body>
+</html>
