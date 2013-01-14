@@ -3,12 +3,22 @@
     <head>
         <title>firefly map</title>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-        <script src="http://d3js.org/d3.v3.min.js"></script>
-        <script src="http://d3js.org/topojson.v0.min.js"></script>
+        <script src="/d3.js"></script>
+        <script src="/topojson.v0.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+        </script>
+
+
         <style>
             .state{
                 fill:none;
                 stroke:black;
+            }
+            body{
+                background-color:black;
+                text-align:center;
+                margin-top:6em;
             }
         </style>
     </head>
@@ -17,11 +27,31 @@
         var width = 960,
             height = 500;
 
-        var path = d3.geo.path();
+        var projection = d3.geo.albers()
+
+        var path = d3.geo.path().projection(projection);
 
         var svg = d3.select("body").append("svg")
             .attr("width", width)
             .attr("height", height);
+
+        function draw_circle(ll){
+            svg.append('circle')
+                .attr('cx', ll[0])
+                .attr('cy', ll[1])
+                .attr('r', 400)
+                .style('fill', "cadetblue")
+                .style('opacity',0)
+                .style('stroke', 'deepskyblue')
+                .transition()
+                .duration(1000)
+                .attr('r', 2)
+                .style('fill', 'cadetblue')
+                .style('opacity', 1)
+                .transition()
+                .delay(1000*60*10)
+                .remove()
+        }
 
         d3.json('us-states.json', function(d){
 
@@ -31,6 +61,15 @@
                 .append('path')
                 .attr('d',path)
                 .attr('class','state')
+                .style('stroke', 'gray')
+                .style('fill','black')
+
+                    
+            var socket = io.connect('http://localhost');
+            socket.on('click', function (data) {
+                ll = projection(data.ll.reverse())
+                draw_circle(ll)
+              });
 
         })
 
