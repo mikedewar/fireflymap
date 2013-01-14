@@ -18,8 +18,10 @@ options = {
 var listener = io.listen(server)
 
 listener.sockets.on('connection', function (socket) {
+    console.log('connection made')
     // once the socket connection is open, make the http request to the stream
     var req = http.request(options, function(res) {
+	console.log('opened request')
         res.setEncoding('utf8');
         res.on('data', function (chunk) {
             // when we get data (chunk) try to parse it

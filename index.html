@@ -65,7 +65,7 @@
                 .style('fill','black')
 
                     
-            var socket = io.connect('http://localhost');
+            var socket = io.connect('http://ec2-54-242-49-175.compute-1.amazonaws.com:8000/');
             socket.on('click', function (data) {
                 ll = projection(data.ll.reverse())
                 draw_circle(ll)
