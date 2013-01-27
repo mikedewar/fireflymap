@@ -1,4 +1,3 @@
-errr - turns out this doesn't do well with multiple connections. Any suggestions would be welcome, but in the meantime maybe don't expect too much from the link below...
 
 
 fireflymap
