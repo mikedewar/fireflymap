@@ -9,37 +9,48 @@ var server = http.createServer(app);
 app.use(express.static(__dirname + '/'));
 server.listen(8000)
 
-// create the stream -> websockets connection
+// connect to the stream
 options = {
     hostname: 'developer.usa.gov',
     path: '/1usagov',
 }
 
-var listener = io.listen(server)
-
-listener.sockets.on('connection', function (socket) {
-    console.log('connection made')
-    // once the socket connection is open, make the http request to the stream
-    var req = http.request(options, function(res) {
-	console.log('opened request')
-        res.setEncoding('utf8');
-        res.on('data', function (chunk) {
-            // when we get data (chunk) try to parse it
-            try {
-                click = JSON.parse(chunk)
-                if (click.ll) {
-                    // if the parsed JSON has a lat/lon in it, then send it to the client
+// create the http request
+sockets = [] // sockets is a list of all the sockets that have been created
+req = http.request(options, function(res) {
+    console.log('request made')
+    res.setEncoding('utf8')
+    
+    res.on('data', function(chunk){
+        // when we get data (chunk) try to parse it
+        try {
+            click = JSON.parse(chunk)
+            if (click.ll) {
+                // if the parsed JSON has a lat/lon in it, then send it to the client
+                sockets.map(function(socket){
                     socket.emit('click', click)
-                }
-            } catch (err) {
-                // print out parsing errors
-                console.log("ERR: " + err)
+                })
             }
-      });
-    });
-    // (oddly?) we call the request's .end() method to get the whole thing going
-    req.end()
-});
+        } catch (err) {
+            // print out parsing errors
+            console.log("PARSE ERR: " + err)
+            console.log(chunk)
+        }
+    })
+    res.on('error', function(err){
+        console.log('SOCKET ERR: ' + err)
+    })
+})
+
+// create the listener and listen for new sockets
+var listener = io.listen(server)
+listener.set('log level', 1);
+listener.sockets.on('connection', function (socket) {
+    //register socket with the stream request
+    sockets.push(socket)
+})
+
+req.end()
 
 
 

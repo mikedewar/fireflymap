@@ -2,9 +2,9 @@
 <html>
     <head>
         <title>firefly map</title>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans: 700italic,400,300' rel='stylesheet' type='text/css'>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <script src="/d3.js"></script>
-        <script src="/topojson.v0.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <script>
         </script>
@@ -18,11 +18,31 @@
             body{
                 background-color:black;
                 text-align:center;
-                margin-top:6em;
+                margin-top:1em;
+            }
+            h1{
+                color:white;
+                font-family: 'Open Sans', sans-serif;
+                font-weight: 700;
+                font-style: italic;
+                text-align:left;
+            }
+            h2{
+                color:white;
+                font-family: 'Open Sans', sans-serif;
+                font-weight: 300;
+                text-align:left;
+                font-size:8pt;
+                margin-top:-10px;
             }
         </style>
     </head>
     <body>
+
+        <h1>live clicks on 1.usa.gov links</h1>
+        <h2>each blue circle is an individual click that just happened. <br />
+data provided by bitly, the link shortening service.</h2>
+
     <script>
         var width = 960,
             height = 500;
